@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using TruckerService.Models;
 
-namespace TruckerService.Data
+namespace TruckerService.Data;
+
+public class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        //Tabelas
-
-        //Configuração/Construtor
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-            
-        }
     }
+
+    public DbSet<Caminhao> Caminhoes { get; set; }
+    public DbSet<Mecanico> Mecanicos { get; set; }
+    public DbSet<OrdemServico> OrdensServico { get; set; }
 }

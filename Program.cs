@@ -1,4 +1,5 @@
 using TruckerService.Data;
+using TruckerService.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers(); //Controllers
-//Repository
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
+
+// Repositories
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=app.db"));
+
+builder.Services.AddScoped<ICaminhaoRepository, CaminhaoRepository>();
+builder.Services.AddScoped<IMecanicoRepository, MecanicoRepository>();
+builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
 
 var app = builder.Build();
 
