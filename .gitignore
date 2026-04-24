@@ -1,0 +1,21 @@
+# Build
+bin/
+obj/
+
+# Banco de dados
+*.db
+*.sqlite
+
+# Arquivos de usuário
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

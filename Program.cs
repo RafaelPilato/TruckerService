@@ -4,6 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Controllers
+builder.Services.AddScoped<ICaminhaoRepository, CaminhaoRepository>();
+builder.Services.AddScoped<IMecanicoRepository, MecanicoRepository>();
+builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
