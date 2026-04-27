@@ -12,7 +12,7 @@ namespace TruckerService.Models
         
         // Relacionamentos [4]
         public int CaminhaoId { get; set; }
-        public Caminhao Veiculo { get; set; }
+        public Caminhao? Veiculo { get; set; }
         
         // Campos opcionais na abertura (Nullable [5])
         public int? MecanicoId { get; set; }

@@ -5,7 +5,7 @@ using TruckerService.Repositories;
 namespace TruckerService.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/mecanico")]
 public class MecanicoController : ControllerBase
 {
     private readonly IMecanicoRepository _repository;

@@ -5,7 +5,7 @@ using TruckerService.Repositories;
 namespace TruckerService.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/ordemservico")]
 public class OrdemServicoController : ControllerBase
 {
     private readonly IOrdemServicoRepository _repository;
@@ -51,5 +51,30 @@ public class OrdemServicoController : ControllerBase
     {
         await _repository.DeleteAsync(id);
         return NoContent();
+    }
+
+    [HttpPut("{id}/finalizar")]
+    public async Task<IActionResult> Finalizar(int id, [FromBody] OrdemServico dadosFechamento)
+    {
+        var ordem = await _repository.GetByIdAsync(id);
+
+        if (ordem == null)
+            return NotFound("Ordem de serviço não encontrada.");
+
+        // Atualiza somente os campos de fechamento
+        ordem.MecanicoId = dadosFechamento.MecanicoId;
+        ordem.DataHoraFechamento = dadosFechamento.DataHoraFechamento;
+        ordem.DescricaoServicoRealizado = dadosFechamento.DescricaoServicoRealizado;
+
+        try
+        {
+            await _repository.FinalizarAsync(ordem);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+        return Ok(ordem);
     }
 }

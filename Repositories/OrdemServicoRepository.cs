@@ -67,6 +67,9 @@ public class OrdemServicoRepository : IOrdemServicoRepository
         if (string.IsNullOrWhiteSpace(ordemServico.DescricaoServicoRealizado))
             throw new InvalidOperationException("A descrição do serviço realizado é obrigatória.");
 
+        if (ordemServico.Status == StatusOS.Finalizada)
+            throw new InvalidOperationException("A OS já está finalizada.");
+
         ordemServico.Status = StatusOS.Finalizada;
 
         _context.OrdensServico.Update(ordemServico);
