@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TruckerService.Models;
 using TruckerService.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TruckerService.Controllers;
 
@@ -15,12 +16,14 @@ public class MecanicoController : ControllerBase
         _repository = repository;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         return Ok(await _repository.GetAllAsync());
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -30,6 +33,7 @@ public class MecanicoController : ControllerBase
         return Ok(mecanico);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Mecanico mecanico)
     {
@@ -37,6 +41,7 @@ public class MecanicoController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = mecanico.Id }, mecanico);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Mecanico mecanico)
     {
@@ -46,6 +51,7 @@ public class MecanicoController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

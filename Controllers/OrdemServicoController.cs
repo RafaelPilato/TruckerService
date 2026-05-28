@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TruckerService.Models;
 using TruckerService.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TruckerService.Controllers;
 
@@ -15,12 +16,14 @@ public class OrdemServicoController : ControllerBase
         _repository = repository;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         return Ok(await _repository.GetAllAsync());
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -30,6 +33,7 @@ public class OrdemServicoController : ControllerBase
         return Ok(ordem);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] OrdemServico ordem)
     {
@@ -37,6 +41,7 @@ public class OrdemServicoController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = ordem.Id }, ordem);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] OrdemServico ordem)
     {
@@ -46,6 +51,7 @@ public class OrdemServicoController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -53,6 +59,7 @@ public class OrdemServicoController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("{id}/finalizar")]
     public async Task<IActionResult> Finalizar(int id, [FromBody] OrdemServico dadosFechamento)
     {
