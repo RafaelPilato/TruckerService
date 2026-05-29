@@ -42,7 +42,17 @@ builder.Services.AddScoped<IOrdemServicoRepository, OrdemServicoRepository>();
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendDev", policy =>
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
 var app = builder.Build();
+
+app.UseCors("FrontendDev");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -53,7 +63,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapControllers();//Direciona para o controller
 
