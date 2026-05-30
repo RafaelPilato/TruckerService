@@ -49,6 +49,10 @@ textarea {
   font: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
 #root {
   min-height: 100vh;
 }
@@ -464,7 +468,9 @@ textarea {
   font-weight: 600;
 }
 
-.field-group input {
+.field-group input,
+.field-group select,
+.field-group textarea {
   width: 100%;
   padding: 13px 14px;
   border-radius: 14px;
@@ -475,11 +481,19 @@ textarea {
   transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
 }
 
-.field-group input::placeholder {
+.field-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.field-group input::placeholder,
+.field-group textarea::placeholder {
   color: #9ca3af;
 }
 
-.field-group input:focus {
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
   border-color: rgba(249, 115, 22, 0.5);
   box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
   background: #ffffff;
@@ -575,6 +589,138 @@ textarea {
   font-size: 1rem;
 }
 
+/* ========================= */
+/* ORDENS DE SERVIÇO - BRENN0 */
+/* ========================= */
+
+.os-page {
+  display: grid;
+  gap: 24px;
+}
+
+.os-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.os-card {
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.os-card h2 {
+  margin-bottom: 18px;
+  color: var(--text);
+}
+
+.os-card h3 {
+  margin: 20px 0 14px;
+  color: var(--text);
+}
+
+.os-list {
+  display: grid;
+  gap: 12px;
+  max-height: 470px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.os-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.os-item:hover {
+  border-color: var(--brand);
+  transform: translateY(-1px);
+}
+
+.os-item--active {
+  border-color: var(--brand);
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.os-item strong {
+  color: var(--text);
+}
+
+.os-item span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.os-detail {
+  display: grid;
+  gap: 18px;
+}
+
+.os-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  color: var(--text);
+}
+
+.os-text-block {
+  background: rgba(249, 115, 22, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.os-text-block strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.os-text-block p {
+  color: var(--muted);
+}
+
+.os-finalizar {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.success-message {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.empty-message {
+  color: var(--muted);
+}
+
+/* ========================= */
+/* RESPONSIVIDADE */
+/* ========================= */
+
 @media (max-width: 1080px) {
   .app-main {
     width: min(100% - 24px, 1180px);
@@ -583,6 +729,16 @@ textarea {
   .module-grid,
   .highlight-grid,
   .module-placeholder__hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .os-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .os-detail-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -624,5 +780,9 @@ textarea {
 
   .auth-card {
     padding: 22px 18px;
+  }
+
+  .os-card {
+    padding: 18px;
   }
 }

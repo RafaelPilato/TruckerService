@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TruckerService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c0ff63d806e2608e48760910e9887fe0769103c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac978252e05a6c078ec481ffd985f50dc325343f")]
 [assembly: System.Reflection.AssemblyProductAttribute("TruckerService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TruckerService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
