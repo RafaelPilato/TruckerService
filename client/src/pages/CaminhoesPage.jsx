@@ -1,15 +1,287 @@
-import ModulePlaceholder from "../components/ui/ModulePlaceholder";
+// src/pages/CaminhoesPage.jsx
+import { useState, useEffect } from "react";
+import { api } from "../services/api";
+import { Truck, Plus, Search, Edit2, Trash2, X } from "lucide-react";
 
 export default function CaminhoesPage() {
+  const [caminhoes, setCaminhoes] = useState([]);
+  const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
+  const [form, setForm] = useState({
+    placa: "",
+    chassi: "",
+    marca: "",
+    modelo: "",
+    ano: new Date().getFullYear(),
+  });
+
+  const loadCaminhoes = async () => {
+    setCarregando(true);
+    setErro("");
+    try {
+      const data = await api.caminhao.getAll();
+      setCaminhoes(data);
+    } catch {
+      setErro("Erro ao carregar a lista de caminhões. Verifique se o backend está rodando.");
+    } finally {
+      setCarregando(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCaminhoes();
+  }, []);
+
+  const handleOpenCreate = () => {
+    setEditingId(null);
+    setForm({ placa: "", chassi: "", marca: "", modelo: "", ano: new Date().getFullYear() });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEdit = (caminhao) => {
+    setEditingId(caminhao.id);
+    setForm({
+      placa: caminhao.placa,
+      chassi: caminhao.chassi,
+      marca: caminhao.marca,
+      modelo: caminhao.modelo,
+      ano: caminhao.ano,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    if (!form.placa || !form.chassi || !form.marca || !form.modelo || !form.ano) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    try {
+      if (editingId) {
+        await api.caminhao.update(editingId, { ...form, id: editingId });
+      } else {
+        await api.caminhao.create(form);
+      }
+      setIsModalOpen(false);
+      loadCaminhoes();
+    } catch {
+      alert("Erro ao salvar os dados do caminhão.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Tem certeza que deseja remover este caminhão?")) return;
+    try {
+      await api.caminhao.delete(id);
+      loadCaminhoes();
+    } catch {
+      alert("Erro ao excluir o caminhão.");
+    }
+  };
+
+  const filteredCaminhoes = caminhoes.filter(
+    (c) =>
+      c.placa.toLowerCase().includes(search.toLowerCase()) ||
+      c.modelo.toLowerCase().includes(search.toLowerCase()) ||
+      c.marca.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <ModulePlaceholder
-      title="Caminhoes"
-      description="Esta pagina ja nasce com o espaco certo para formulario, tabela e acoes de gestao da frota, sem acoplamento prematuro ao back-end."
-      highlights={[
-        "Area pronta para receber formulario de cadastro e edicao.",
-        "Espaco visual reservado para listagem de caminhoes.",
-        "Base de navegacao consistente com o restante do sistema.",
-      ]}
-    />
+    <div>
+      {/* Cabeçalho */}
+      <div className="page-header">
+        <div className="page-title">
+          <h1>Caminhões</h1>
+          <p>Cadastre e gerencie a frota de caminhões da transportadora.</p>
+        </div>
+        <button className="btn btn-primary" onClick={handleOpenCreate}>
+          <Plus size={18} /> Novo Caminhão
+        </button>
+      </div>
+
+      {/* Feedback de erro */}
+      {erro && <p style={{ color: "red", marginBottom: "1rem" }}>{erro}</p>}
+
+      {/* Cards de métricas */}
+      <div className="stats-grid">
+        <div className="glass-panel stat-card">
+          <div className="stat-icon orange">
+            <Truck />
+          </div>
+          <div className="stat-info">
+            <h3>Total na Frota</h3>
+            <p>{caminhoes.length}</p>
+          </div>
+        </div>
+        <div className="glass-panel stat-card">
+          <div className="stat-icon emerald">
+            <Truck />
+          </div>
+          <div className="stat-info">
+            <h3>Mais Recente</h3>
+            <p>{caminhoes.length > 0 ? Math.max(...caminhoes.map((c) => c.ano)) : "-"}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Barra de busca */}
+      <div
+        className="glass-panel"
+        style={{ padding: "1.25rem", marginBottom: "1.5rem", display: "flex", gap: "1rem", alignItems: "center" }}
+      >
+        <div style={{ position: "relative", flexGrow: 1 }}>
+          <Search
+            size={18}
+            style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }}
+          />
+          <input
+            type="text"
+            className="form-input"
+            placeholder="Buscar por placa, modelo ou marca..."
+            style={{ paddingLeft: "2.5rem" }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Tabela */}
+      <div className="table-container">
+        {carregando ? (
+          <div className="empty-state"><p>Carregando...</p></div>
+        ) : filteredCaminhoes.length > 0 ? (
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Placa</th>
+                <th>Modelo / Marca</th>
+                <th>Chassi</th>
+                <th>Ano</th>
+                <th style={{ textAlign: "right" }}>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCaminhoes.map((c) => (
+                <tr key={c.id}>
+                  <td style={{ fontWeight: "700", color: "var(--accent-orange)" }}>{c.placa}</td>
+                  <td>
+                    <div>{c.modelo}</div>
+                    <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{c.marca}</div>
+                  </td>
+                  <td style={{ fontFamily: "monospace", fontSize: "0.85rem" }}>{c.chassi}</td>
+                  <td>{c.ano}</td>
+                  <td style={{ textAlign: "right" }}>
+                    <div style={{ display: "inline-flex", gap: "0.5rem" }}>
+                      <button className="btn-icon btn-icon-edit" onClick={() => handleOpenEdit(c)}>
+                        <Edit2 size={16} />
+                      </button>
+                      <button className="btn-icon btn-icon-delete" onClick={() => handleDelete(c.id)}>
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="empty-state">
+            <Truck />
+            <p>Nenhum caminhão encontrado.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="glass-panel modal-content">
+            <div className="modal-header">
+              <h2>{editingId ? "Editar Caminhão" : "Cadastrar Caminhão"}</h2>
+              <button className="modal-close" onClick={() => setIsModalOpen(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={handleSave}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">Placa</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    maxLength={10}
+                    placeholder="Ex: ABC-1234"
+                    value={form.placa}
+                    onChange={(e) => setForm({ ...form, placa: e.target.value.toUpperCase() })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Ano de Fabricação</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    min={1950}
+                    max={new Date().getFullYear() + 2}
+                    value={form.ano}
+                    onChange={(e) =>
+                      setForm({ ...form, ano: parseInt(e.target.value) || new Date().getFullYear() })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Número do Chassi</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="Insira o chassi de 17 caracteres"
+                  value={form.chassi}
+                  onChange={(e) => setForm({ ...form, chassi: e.target.value })}
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">Marca</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Ex: Volvo, Scania"
+                    value={form.marca}
+                    onChange={(e) => setForm({ ...form, marca: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Modelo</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Ex: FH 540, R 450"
+                    value={form.modelo}
+                    onChange={(e) => setForm({ ...form, modelo: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Salvar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
