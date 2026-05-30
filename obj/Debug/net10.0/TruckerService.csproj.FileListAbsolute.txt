@@ -535,7 +535,4 @@ C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\De
 C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\client\package-lock.json
 C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\client\package.json
-C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\client\tsconfig.json
-C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\client\tsconfig.node.json
-C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\front-samuel-caminhoes\package-lock.json
-C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\front-samuel-caminhoes\package.json
+C:\Users\RFraf\OneDrive\Documentos\Faculdade\Web Avançado\TruckerService\bin\Debug\net10.0\package-lock.json
